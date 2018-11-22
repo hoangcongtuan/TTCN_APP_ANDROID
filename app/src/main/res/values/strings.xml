@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Hoc Bang Lai Xe</string>
+    <string name="login_with_google">Login with Google</string>
+    <string name="login_gg_failed">Đăng nhập với Google thất bại</string>
+    <string name="log_out">Đăng xuất</string>
+    <string name="logout_success">Đăng xuất thành công</string>
+    <string name="logout_failed">Đăng xuất thất bại</string>
+    <string name="processing">Đang xử lý...</string>
 </resources>
