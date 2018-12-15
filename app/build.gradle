@@ -39,6 +39,8 @@ dependencies {
     //circle Image
     implementation 'de.hdodenhof:circleimageview:2.2.0'
 
+    implementation 'com.github.hedzr:android-file-chooser:v1.1.10'
+
     //universal Image Loader
     implementation 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
     testImplementation 'junit:junit:4.12'
