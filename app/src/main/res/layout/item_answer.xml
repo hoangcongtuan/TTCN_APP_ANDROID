@@ -5,6 +5,7 @@
     android:orientation="vertical">
 
     <TextView
+        android:id="@+id/tvQuestion"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
@@ -15,6 +16,7 @@
         android:textSize="16sp" />
 
     <ImageView
+        android:id="@+id/imageView"
         android:layout_width="wrap_content"
         android:layout_height="150dp"
         android:layout_gravity="center"
@@ -27,142 +29,176 @@
         android:background="#6E6E6E" />
 
     <LinearLayout
+        android:id="@+id/layout_answer1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
+        android:orientation="vertical">
         <LinearLayout
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_margin="7dp"
-            android:background="@drawable/bg_circle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:orientation="horizontal">
+            <LinearLayout
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_margin="7dp"
+                android:background="@drawable/bg_circle"
+                android:orientation="horizontal"
+                android:layout_gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="10dp"
+                    android:text="1"
+                    android:textColor="@color/sl_text_tab"
+                    android:textSize="18sp" />
+            </LinearLayout>
 
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/tvAnswer1"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginLeft="10dp"
-                android:text="1"
-                android:textColor="@color/sl_text_tab"
-                android:textSize="18sp" />
+                android:text="hihiihi"
+                android:textSize="14sp" />
         </LinearLayout>
 
-        <TextView
+        <View
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="hihiihi"
-            android:textSize="14sp" />
+            android:layout_height="0.7dp"
+            android:background="#6E6E6E" />
     </LinearLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.7dp"
-        android:background="#6E6E6E" />
 
     <LinearLayout
+        android:id="@+id/layout_answer2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
+        android:orientation="vertical">
         <LinearLayout
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_margin="7dp"
-            android:background="@drawable/bg_circle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:orientation="horizontal">
+            <LinearLayout
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_margin="7dp"
+                android:background="@drawable/bg_circle"
+                android:orientation="horizontal"
+                android:layout_gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="10dp"
+                    android:text="2"
+                    android:textColor="@color/sl_text_tab"
+                    android:textSize="18sp" />
+            </LinearLayout>
 
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/tvAnswer2"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginLeft="10dp"
-                android:text="1"
-                android:textColor="@color/sl_text_tab"
-                android:textSize="18sp" />
+                android:text="hihiihi"
+                android:textSize="14sp" />
         </LinearLayout>
 
-        <TextView
+        <View
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="hihiihi"
-            android:textSize="14sp" />
+            android:layout_height="0.7dp"
+            android:background="#6E6E6E" />
     </LinearLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.7dp"
-        android:background="#6E6E6E" />
 
     <LinearLayout
+        android:id="@+id/layout_answer3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
+        android:orientation="vertical">
         <LinearLayout
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_margin="7dp"
-            android:background="@drawable/bg_circle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:orientation="horizontal">
 
+            <LinearLayout
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_margin="7dp"
+                android:background="@drawable/bg_circle"
+                android:orientation="horizontal"
+                android:layout_gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="10dp"
+                    android:text="3"
+                    android:textColor="@color/sl_text_tab"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/tvAnswer3"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginLeft="10dp"
-                android:text="1"
-                android:textColor="@color/sl_text_tab"
-                android:textSize="18sp" />
+                android:text="hihiihi"
+                android:textSize="14sp" />
         </LinearLayout>
 
-        <TextView
+        <View
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="hihiihi"
-            android:textSize="14sp" />
+            android:layout_height="0.7dp"
+            android:background="#6E6E6E" />
     </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.7dp"
-        android:background="#6E6E6E" />
 
     <LinearLayout
+        android:id="@+id/layout_answer4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
         <LinearLayout
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_margin="7dp"
-            android:background="@drawable/bg_circle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:orientation="horizontal">
 
+            <LinearLayout
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_margin="7dp"
+                android:background="@drawable/bg_circle"
+                android:orientation="horizontal"
+                android:layout_gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="10dp"
+                    android:text="4"
+                    android:textColor="@color/sl_text_tab"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/tvAnswer4"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginLeft="10dp"
-                android:text="1"
-                android:textColor="@color/sl_text_tab"
-                android:textSize="18sp" />
+                android:text="hihiihi"
+                android:textSize="14sp" />
         </LinearLayout>
 
-        <TextView
+        <View
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="hihiihi"
-            android:textSize="14sp" />
+            android:layout_height="0.7dp"
+            android:background="#6E6E6E" />
     </LinearLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.7dp"
-        android:background="#6E6E6E" />
 </LinearLayout>
