@@ -1,6 +1,8 @@
 package com.qtt.hocbanglaixe;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,23 +13,30 @@ import android.widget.TextView;
 
 import com.qtt.hocbanglaixe.model.Question;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.ViewHolder> {
     private Context mContext;
     private List<Question> mData;
-    private IOnItemClickedListener mIOnItemClickedListener;
+    private QuestionAdapterListener mListener;
 
-    public void setOnItemClickListener(IOnItemClickedListener listener) {
-        mIOnItemClickedListener = listener;
+    private boolean[][] answers = new boolean[20][4];
+
+    public void setOnItemClickListener(QuestionAdapterListener listener) {
+        mListener = listener;
     }
 
     public QuestionAdapter(Context context, List<Question> Answer) {
         this.mContext = context;
         this.mData = Answer;
+        for(int i = 0; i < 20; i++)
+            Arrays.fill(this.answers[i], false);
     }
 
     public void setQuestionList(List<Question> questions) {
@@ -82,8 +91,6 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.ViewHo
         }
         else
             holder.layout_answer4.setVisibility(View.GONE);
-
-
     }
 
 
@@ -124,18 +131,46 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.ViewHo
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (mIOnItemClickedListener != null) {
-                        mIOnItemClickedListener.onClick(getLayoutPosition());
+                    if (mListener != null) {
+                        mListener.onQuestionClick(getLayoutPosition());
                     }
                 }
             });
 
         }
 
+        @OnClick(R.id.layout_answer1)
+        public void onLayoutAns1Click(View view) {
+            toggleAnswer(getAdapterPosition(), 0, layout_answer1);
+        }
+
+        @OnClick(R.id.layout_answer2)
+        public void onLayoutAns2Click(View view) {
+            toggleAnswer(getAdapterPosition(), 1, layout_answer2);
+        }
+
+        @OnClick(R.id.layout_answer3)
+        public void onLayoutAns3Click(View view) {
+            toggleAnswer(getAdapterPosition(), 2, layout_answer3);
+        }
+
+        @OnClick(R.id.layout_answer4)
+        public void onLayoutAns4Click(View view) {
+            toggleAnswer(getAdapterPosition(), 3, layout_answer4);
+        }
     }
 
-    public interface IOnItemClickedListener {
-        void onClick(int positon);
+    private void toggleAnswer(int questionId, int answer, View layout_answer) {
+        boolean isSelect;
+        isSelect = (answers[questionId][answer] = !answers[questionId][answer]);
+        if (isSelect) {
+            layout_answer.setBackgroundColor(ContextCompat.getColor(layout_answer.getContext(), R.color.colorPrimary));
+        } else
+            layout_answer.setBackgroundColor(Color.TRANSPARENT);
+    }
+
+    public interface QuestionAdapterListener {
+        void onQuestionClick(int positon);
     }
 
 }

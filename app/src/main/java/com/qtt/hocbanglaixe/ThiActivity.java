@@ -31,7 +31,7 @@ import java.util.concurrent.TimeUnit;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ThiActivity extends AppCompatActivity implements View.OnClickListener {
+public class ThiActivity extends AppCompatActivity implements View.OnClickListener, QuestionAdapter.QuestionAdapterListener {
     private static final String API_URL = "https://hoclaixe-ttcn.herokuapp.com/questions";
     private static final String TAG = ThiActivity.class.getName();
     CountDownTimer timer;
@@ -76,6 +76,7 @@ public class ThiActivity extends AppCompatActivity implements View.OnClickListen
         mRcAnswer = findViewById(R.id.rc_answer);
         mRcAnswer.setLayoutManager(mLinearLayoutManager = new LinearLayoutManager(this, LinearLayout.HORIZONTAL, false));
         mAdapter = new QuestionAdapter(this, mQuestions);
+        mAdapter.setOnItemClickListener(this);
         mRcAnswer.setAdapter(mAdapter);
         final SnapHelper snapHelper = new PagerSnapHelper();
         snapHelper.attachToRecyclerView(mRcAnswer);
@@ -98,6 +99,11 @@ public class ThiActivity extends AppCompatActivity implements View.OnClickListen
     private void init() {
         GetQuestionAsyncTask asyncTask = new GetQuestionAsyncTask();
         asyncTask.execute(API_URL);
+    }
+
+    @Override
+    public void onQuestionClick(int positon) {
+        Log.d(TAG, "onQuestionClick: " + positon);
     }
 
     class GetQuestionAsyncTask extends AsyncTask<String, Integer, String> {
@@ -138,17 +144,6 @@ public class ThiActivity extends AppCompatActivity implements View.OnClickListen
         mAdapter.notifyDataSetChanged();
         Log.d(TAG, "prepareQuestion: ");
     }
-
-
-//    private void loadData() {
-//        mQuestions.add(new Answer());
-//        mQuestions.add(new Answer());
-//        mQuestions.add(new Answer());
-//        mQuestions.add(new Answer());
-//        mQuestions.add(new Answer());
-//        mAdapter.notifyDataSetChanged();
-//    }
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
