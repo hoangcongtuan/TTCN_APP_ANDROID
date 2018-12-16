@@ -40,6 +40,9 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener{
 
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
+
     ImageView imgAvatar;
     TextView tvUserName;
     TextView tvEmail;
@@ -87,14 +90,17 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private void initWidget() {
-        setTitle("Học bằng lái xe");
+        setSupportActionBar(mToolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(R.string.main_activity_title);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+
         setNewPage(new LearnFragment());
-
-
-        Toolbar toolbar =  findViewById(R.id.toolbar);
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                this, drawer, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
@@ -140,9 +146,6 @@ public class MainActivity extends AppCompatActivity implements
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-    public void setTitle(String title) {
-
     }
 
     @Override
