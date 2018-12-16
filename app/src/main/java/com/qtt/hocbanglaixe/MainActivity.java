@@ -3,15 +3,19 @@ package com.qtt.hocbanglaixe;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -33,18 +37,14 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements DrawerLayout.DrawerListener,  MenuItemAdapter.IOnMenuItemClicklistener {
-    private DrawerLayout drawer;
+public class MainActivity extends AppCompatActivity implements
+        NavigationView.OnNavigationItemSelectedListener{
+
+    ImageView imgAvatar;
+    TextView tvUserName;
+    TextView tvEmail;
+
     protected Fragment mFragment;
-    private TextView mTvTitle;
-    private MENU_ITEM mCurrentMenu, mMenuBefore;
-    public enum MENU_ITEM {MENU_LEARN, MENU_LOGOUT, MENU_SETTING, MENU_SUPPORT}
-    private DrawerLayout mDrawerLayout;
-    private View mLayoutSlideMenu, mCurrentTab, mTabContact, mTabAccount;
-    private RecyclerView mRecyclerViewMenu;
-    private TextView mTvFullname;
-    private ImageView mImvAvatar, mImvBack;
-    private Fragment mCurrentFragment;
     GoogleSignInClient mGoogleSignInClient;
 
     @Override
@@ -70,7 +70,12 @@ public class MainActivity extends AppCompatActivity implements DrawerLayout.Draw
             Intent i = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(i);
             finish();
+        } else {
+            tvUserName.setText(account.getDisplayName());
+            tvEmail.setText(account.getEmail());
+            Glide.with(this).load(account.getPhotoUrl()).into(imgAvatar);
         }
+
     }
 
     private void init() {
@@ -82,31 +87,26 @@ public class MainActivity extends AppCompatActivity implements DrawerLayout.Draw
     }
 
     private void initWidget() {
-        //this.getSupportActionBar().hide();
-        mDrawerLayout = findViewById(R.id.drawer_layout);
-        mLayoutSlideMenu = findViewById(R.id.layout_left_menu);
-        mRecyclerViewMenu = findViewById(R.id.recyclerview_menu);
-        mTvTitle = (TextView) findViewById(R.id.tv_title);
-        mRecyclerViewMenu.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        ArrayList<MenuItem> menuItems = new ArrayList<>();
-        menuItems.add(new MenuItem(MENU_ITEM.MENU_LEARN, R.drawable.ic_logout, "Học bằng lái xe"));
-        menuItems.add(new MenuItem(MENU_ITEM.MENU_SUPPORT, R.drawable.ic_logout, "Hướng dẫn"));
-        menuItems.add(new MenuItem(MENU_ITEM.MENU_SETTING, R.drawable.ic_logout, "Cài đặt"));
-        menuItems.add(new MenuItem(MENU_ITEM.MENU_LOGOUT, R.drawable.ic_logout, "Đăng xuất"));
-        MenuItemAdapter menuAdapter = new MenuItemAdapter(this, menuItems);
-        menuAdapter.setItemListener(this);
-        mRecyclerViewMenu.setAdapter(menuAdapter);
-
-        mCurrentMenu = MENU_ITEM.MENU_LEARN;
-        menuAdapter.setItemSelected(MENU_ITEM.MENU_LEARN);
-        mDrawerLayout.addDrawerListener(this);
-
-        menuAdapter.setItemSelected(MENU_ITEM.MENU_LEARN);
         setTitle("Học bằng lái xe");
         setNewPage(new LearnFragment());
+
+
+        Toolbar toolbar =  findViewById(R.id.toolbar);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        tvUserName = navigationView.getHeaderView(0).findViewById(R.id.tvUserName);
+        tvEmail = navigationView.getHeaderView(0).findViewById(R.id.tvUserEmail);
+        imgAvatar = navigationView.getHeaderView(0).findViewById(R.id.imgAvatar);
     }
 
-    public void onBtnLogoutClick(View view) {
+    public void onBtnLogoutClick() {
         mGoogleSignInClient.signOut().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
@@ -121,35 +121,6 @@ public class MainActivity extends AppCompatActivity implements DrawerLayout.Draw
                 Toast.makeText(MainActivity.this, R.string.logout_failed, Toast.LENGTH_SHORT).show();
             }
         });
-    }
-
-    @Override
-    public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
-
-    }
-
-    @Override
-    public void onDrawerOpened(@NonNull View drawerView) {
-
-    }
-
-    @Override
-    public void onDrawerClosed(@NonNull View drawerView) {
-
-    }
-
-    @Override
-    public void onDrawerStateChanged(int newState) {
-
-    }
-
-    @Override
-    public void onItemClick(MENU_ITEM menuId, MENU_ITEM currentMenu) {
-        switch (currentMenu) {
-            case MENU_LOGOUT:
-                onBtnLogoutClick(null);
-                break;
-        }
     }
 
     public void setNewPage(Fragment fragment) {
@@ -171,8 +142,16 @@ public class MainActivity extends AppCompatActivity implements DrawerLayout.Draw
         }
     }
     public void setTitle(String title) {
-        if (mTvTitle != null) {
-            mTvTitle.setText(title);
+
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull android.view.MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.item_logout:
+                onBtnLogoutClick();
+                break;
         }
+        return false;
     }
 }

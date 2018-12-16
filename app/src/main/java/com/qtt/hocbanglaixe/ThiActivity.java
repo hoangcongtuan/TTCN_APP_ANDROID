@@ -67,7 +67,7 @@ public class ThiActivity extends AppCompatActivity implements View.OnClickListen
         timer = new CountDownTimer(900000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
-                tvTimer.setText(String.format("%d min, %d sec",
+                tvTimer.setText(String.format(Locale.US, "%d min, %d sec",
                         TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished),
                         TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) -
                                 TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished))

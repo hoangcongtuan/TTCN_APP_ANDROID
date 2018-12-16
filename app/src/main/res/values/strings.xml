@@ -7,4 +7,14 @@
     <string name="logout_failed">Đăng xuất thất bại</string>
     <string name="processing">Đang xử lý...</string>
     <string name="loading">Loading...</string>
+    <string name="title_activity_test">TestActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+    <string name="history">Lịch sử</string>
+    <string name="profile">Hồ sơ</string>
+    <string name="help">Trợ giúp</string>
 </resources>
