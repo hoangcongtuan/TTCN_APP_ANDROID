@@ -27,6 +27,7 @@ public class LearnFragment extends BaseFragment implements View.OnClickListener 
     @Override
     protected void addListener() {
         imgThi.setOnClickListener(this);
+        imgBienBao.setOnClickListener(this);
     }
 
     @Override
@@ -34,6 +35,9 @@ public class LearnFragment extends BaseFragment implements View.OnClickListener 
         switch (v.getId()){
             case R.id.img_thi:
                 startActivity(new Intent(getContext(), ThiActivity.class));
+                break;
+            case R.id.img_bienbao:
+                startActivity(new Intent(getContext(), SignActivity.class));
                 break;
         }
     }

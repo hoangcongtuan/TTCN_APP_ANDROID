@@ -17,4 +17,7 @@
     <string name="history">Lịch sử</string>
     <string name="profile">Hồ sơ</string>
     <string name="help">Trợ giúp</string>
+    <string name="title_activity_sign_activty">Biển báo</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="main_activity_title">Học bằng lái xe A1</string>
 </resources>
