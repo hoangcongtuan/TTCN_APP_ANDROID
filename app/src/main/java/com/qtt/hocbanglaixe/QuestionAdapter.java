@@ -87,7 +87,6 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.ViewHo
             holder.layout_answer3.setVisibility(View.VISIBLE);
             holder.tvAnswer3.setText(ans3);
         }
-
         else
             holder.layout_answer3.setVisibility(View.GONE);
 
@@ -97,6 +96,15 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.ViewHo
         }
         else
             holder.layout_answer4.setVisibility(View.GONE);
+
+        boolean[] answerTable = answers[position];
+        int selectColor = ContextCompat.getColor(mContext, R.color.colorPrimary);
+        int noneSelectColor = Color.TRANSPARENT;
+
+        holder.layout_answer1.setBackgroundColor(answerTable[0]?selectColor:noneSelectColor);
+        holder.layout_answer2.setBackgroundColor(answerTable[1]?selectColor:noneSelectColor);
+        holder.layout_answer3.setBackgroundColor(answerTable[2]?selectColor:noneSelectColor);
+        holder.layout_answer4.setBackgroundColor(answerTable[3]?selectColor:noneSelectColor);
     }
 
 
@@ -168,7 +176,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.ViewHo
 
     private void toggleAnswer(int questionId, int answer, View layout_answer) {
         boolean isSelect;
-        isSelect = (answers[questionId][answer] = !answers[questionId][answer]);
+        isSelect = ((answers[questionId][answer] = !answers[questionId][answer]));
         if (isSelect) {
             layout_answer.setBackgroundColor(ContextCompat.getColor(layout_answer.getContext(), R.color.colorPrimary));
         } else
