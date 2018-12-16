@@ -1,6 +1,7 @@
 package com.qtt.hocbanglaixe;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
@@ -55,7 +56,12 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.ViewHo
         Question item = mData.get(position);
 
         holder.tvQuestion.setText(item.getQUESTIONCONTENT());
-        holder.imageView.setVisibility(View.GONE);
+
+        if (item.getIMAGE() != null) {
+            mListener.requestImage(item.getIMAGE(), holder.imageView);
+            holder.imageView.setVisibility(View.VISIBLE);
+        } else
+            holder.imageView.setVisibility(View.GONE);
 
         String ans1 = item.getOPTION1();
         String ans2 = item.getOPTION2();
@@ -171,6 +177,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.ViewHo
 
     public interface QuestionAdapterListener {
         void onQuestionClick(int positon);
+        void requestImage(String imageID, ImageView imageView);
     }
 
 }

@@ -11,6 +11,9 @@ public class Question {
     @SerializedName("QUESTIONTYPE")
     @Expose
     private Integer qUESTIONTYPE;
+    @SerializedName("IMAGE")
+    @Expose
+    private String iMAGE;
     @SerializedName("QUESTIONCONTENT")
     @Expose
     private String qUESTIONCONTENT;
@@ -47,6 +50,14 @@ public class Question {
 
     public void setQUESTIONTYPE(Integer qUESTIONTYPE) {
         this.qUESTIONTYPE = qUESTIONTYPE;
+    }
+
+    public String getIMAGE() {
+        return iMAGE;
+    }
+
+    public void setIMAGE(String iMAGE) {
+        this.iMAGE = iMAGE;
     }
 
     public String getQUESTIONCONTENT() {

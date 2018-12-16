@@ -1,5 +1,6 @@
 package com.qtt.hocbanglaixe;
 
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -17,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.qtt.hocbanglaixe.Utils.HttpHandler;
@@ -26,14 +28,17 @@ import com.qtt.hocbanglaixe.widget.ProgressDialogBuilderCustom;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class ThiActivity extends AppCompatActivity implements View.OnClickListener, QuestionAdapter.QuestionAdapterListener {
     private static final String API_URL = "https://hoclaixe-ttcn.herokuapp.com/questions";
     private static final String TAG = ThiActivity.class.getName();
+    private static final String GET_IMG_URL = "https://hoclaixe-ttcn.herokuapp.com/images/%s";
     CountDownTimer timer;
     TextView tvTimer;
     ImageView imgBack;
@@ -42,6 +47,9 @@ public class ThiActivity extends AppCompatActivity implements View.OnClickListen
     private QuestionAdapter mAdapter;
     private FragmentTransaction transaction;
     private ArrayList<Question> mQuestions = new ArrayList<>();
+
+    //some flag, variable
+    private int currentQuestionIndex; // 0 - 19
 
     @BindView(R.id.tv_num_ques)
     TextView tvNumQues;
@@ -80,6 +88,7 @@ public class ThiActivity extends AppCompatActivity implements View.OnClickListen
         mRcAnswer.setAdapter(mAdapter);
         final SnapHelper snapHelper = new PagerSnapHelper();
         snapHelper.attachToRecyclerView(mRcAnswer);
+        currentQuestionIndex = 0;
         mRcAnswer.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -87,6 +96,7 @@ public class ThiActivity extends AppCompatActivity implements View.OnClickListen
                 if(newState == RecyclerView.SCROLL_STATE_IDLE) {
                     View centerView = snapHelper.findSnapView(mLinearLayoutManager);
                     int pos = mLinearLayoutManager.getPosition(centerView);
+                    currentQuestionIndex = pos;
                     tvNumQues.setText(++pos + "");
                     tvNumQuesBelow.setText(pos + "");
                     Log.e("Snapped Item Position:",""+pos);
@@ -104,6 +114,12 @@ public class ThiActivity extends AppCompatActivity implements View.OnClickListen
     @Override
     public void onQuestionClick(int positon) {
         Log.d(TAG, "onQuestionClick: " + positon);
+    }
+
+    @Override
+    public void requestImage(String imageID, ImageView imageView) {
+        String imgUrl = String.format(Locale.US, GET_IMG_URL, imageID);
+        Glide.with(this).load(imgUrl).into(imageView);
     }
 
     class GetQuestionAsyncTask extends AsyncTask<String, Integer, String> {
@@ -144,6 +160,23 @@ public class ThiActivity extends AppCompatActivity implements View.OnClickListen
         mAdapter.notifyDataSetChanged();
         Log.d(TAG, "prepareQuestion: ");
     }
+
+
+    @OnClick(R.id.imgNext)
+    void onImgNextClick() {
+        if (currentQuestionIndex == 19)
+            return;
+        mRcAnswer.smoothScrollToPosition(++currentQuestionIndex);
+    }
+
+    @OnClick(R.id.imgBack)
+    void onImgBackClick() {
+        if (currentQuestionIndex == 0)
+            return;
+        mRcAnswer.smoothScrollToPosition(--currentQuestionIndex);
+    }
+
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
