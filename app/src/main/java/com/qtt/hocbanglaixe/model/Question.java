@@ -116,4 +116,21 @@ public class Question {
         this.oPTION4 = oPTION4;
     }
 
+
+    public int getOptionCount() {
+        int res = 4;
+        if (getOPTION4() == null)
+            res--;
+
+        if (getOPTION3() == null)
+            res--;
+
+        if (getOPTION2() == null)
+            res--;
+
+        if (getOPTION1() == null)
+            res--;
+
+        return res;
+    }
 }

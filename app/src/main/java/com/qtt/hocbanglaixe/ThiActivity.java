@@ -1,13 +1,12 @@
 package com.qtt.hocbanglaixe;
 
-import android.graphics.Bitmap;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -15,7 +14,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PagerSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SnapHelper;
-import android.text.BoringLayout;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -31,6 +29,7 @@ import com.qtt.hocbanglaixe.widget.ProgressDialogBuilderCustom;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
@@ -43,7 +42,7 @@ public class ThiActivity extends AppCompatActivity implements View.OnClickListen
     private static final String API_URL = "https://hoclaixe-ttcn.herokuapp.com/questions";
     private static final String TAG = ThiActivity.class.getName();
     private static final String GET_IMG_URL = "https://hoclaixe-ttcn.herokuapp.com/images/%s";
-    CountDownTimer timer;
+    CountDownTimer countDownTimer;
     TextView tvTimer;
     ImageView imgBack;
     private RecyclerView mRcAnswer;
@@ -51,17 +50,12 @@ public class ThiActivity extends AppCompatActivity implements View.OnClickListen
     private LinearLayoutManager mLinearLayoutManager;
     private QuestionAdapter mAdapter;
     private AnswerBottomAdapter mBottomAdapter;
-    private FragmentTransaction transaction;
     private ArrayList<Question> mQuestions = new ArrayList<>();
-    List<Question> questionList;
     private ArrayList<Boolean> mAnsBottom = new ArrayList<>();
     //some flag, variable
     private int currentQuestionIndex; // 0 - 19
-    private int prePos = 0;
     private boolean[][] answer;
     private TextView tvEndPractice;
-    private boolean[] arrAns;
-    private boolean endPracticee = false;
 
     @BindView(R.id.tv_num_ques)
     TextView tvNumQues;
@@ -73,6 +67,7 @@ public class ThiActivity extends AppCompatActivity implements View.OnClickListen
     BottomSheetBehavior sheetBehavior;
 
     AlertDialog loadQuestionDialog;
+    private boolean isEnd;
 
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,7 +75,7 @@ public class ThiActivity extends AppCompatActivity implements View.OnClickListen
         ButterKnife.bind(this);
         init();
         tvTimer = findViewById(R.id.tv_timer);
-        timer = new CountDownTimer(900000, 1000) {
+        countDownTimer = new CountDownTimer(900000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 tvTimer.setText(String.format(Locale.US, "%d min, %d sec",
@@ -93,9 +88,9 @@ public class ThiActivity extends AppCompatActivity implements View.OnClickListen
 
             @Override
             public void onFinish() {
-
+                endPractice();
             }
-        }.start();
+        };
         tvEndPractice = findViewById(R.id.tv_end);
         tvEndPractice.setOnClickListener(this);
         imgBack = findViewById(R.id.img_back);
@@ -151,21 +146,8 @@ public class ThiActivity extends AppCompatActivity implements View.OnClickListen
                         break;
                     case BottomSheetBehavior.STATE_EXPANDED: {
                         answer = mAdapter.getAnswers();
-                        if (!endPracticee) {
-                            for (int i = 0; i < 20; i++) {
-                                mAnsBottom.add(false);
-                            }
-                            mBottomAdapter = new AnswerBottomAdapter(ThiActivity.this, answer, mAnsBottom);
-                            mBottomAdapter.setSeclectIndex(prePos + 1);
-                            mBottomAdapter.setOnItemClickListener(ThiActivity.this);
-                            mRcAnswerBottom.setAdapter(mBottomAdapter);
-                            mBottomAdapter.notifyDataSetChanged();
-                        } else {
-                            mBottomAdapter = new AnswerBottomAdapter(ThiActivity.this, answer ,arrAns);
-                            mBottomAdapter.setOnItemClickListener(ThiActivity.this);
-                            mRcAnswerBottom.setAdapter(mBottomAdapter);
-                            mBottomAdapter.notifyDataSetChanged();
-                        }
+                        mBottomAdapter.updateAnswerTable(answer);
+                        mBottomAdapter.notifyDataSetChanged();
                     }
                     break;
                     case BottomSheetBehavior.STATE_COLLAPSED:
@@ -181,6 +163,8 @@ public class ThiActivity extends AppCompatActivity implements View.OnClickListen
             public void onSlide(@NonNull View bottomSheet, float slideOffset) {
             }
         });
+
+        isEnd = false;
     }
 
     private void init() {
@@ -203,7 +187,6 @@ public class ThiActivity extends AppCompatActivity implements View.OnClickListen
     public void onNumQuesClick(int positon) {
         mRcAnswer.smoothScrollToPosition(positon);
         sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-        prePos = positon;
     }
 
     class GetQuestionAsyncTask extends AsyncTask<String, Integer, String> {
@@ -232,7 +215,7 @@ public class ThiActivity extends AppCompatActivity implements View.OnClickListen
             super.onPostExecute(s);
             loadQuestionDialog.dismiss();
             prepareQuestion(s);
-            Log.d(TAG, "onPostExecute: " + s);
+            countDownTimer.start();
         }
     }
 
@@ -241,10 +224,17 @@ public class ThiActivity extends AppCompatActivity implements View.OnClickListen
         Type collectionType = new TypeToken<List<Question>>() {
         }.getType();
         List<Question> questions = gson.fromJson(jsonQuestion, collectionType);
+        logAnswer(questions);
         mQuestions = (ArrayList<Question>) questions;
         mAdapter.setQuestionList(questions);
         mAdapter.notifyDataSetChanged();
         Log.d(TAG, "prepareQuestion: ");
+    }
+
+    private void logAnswer(List<Question> questions) {
+        for (Question question : questions) {
+            Log.d(TAG, "logAnswer: " + questions.indexOf(question) + "ans = " + question.getANSWERS());
+        }
     }
 
 
@@ -271,43 +261,86 @@ public class ThiActivity extends AppCompatActivity implements View.OnClickListen
                 finish();
                 break;
             case R.id.tv_end:
-                endPractice();
+                if (!isEnd) {
+                    new AlertDialog.Builder(this)
+                            .setTitle(R.string.app_name)
+                            .setMessage(R.string.end_alert)
+                            .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    endPractice();
+                                }
+                            }).setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                        }
+                    }).create().show();
+                }
                 break;
         }
     }
 
     private void endPractice() {
-        ArrayList<String> arrAnswer = new ArrayList<>();
-        boolean[][] booleanAnswer = new boolean[20][4];
-        String[] temp;
+        float markPoint = 0;
+        boolean[][] userAnswerTable = mAdapter.getAnswers().clone();
+        boolean[] resultOverview = new boolean[20];
+        Arrays.fill(resultOverview, false);
+
+        isEnd = true;
         for (int i = 0; i < 20; i++) {
-            arrAnswer.add(mQuestions.get(i).getANSWERS());
-            temp = arrAnswer.get(i).split(",");
-            for (int j = 0; j < temp.length; j++) {
-                //    intAnswer[i][j] = Integer.parseInt(temp[j]);
-//                if(temp[j].length() ==2){
-//                    temp[j] = temp[j].split(" ");
-//                }
-                int a = Integer.parseInt(temp[j]);
-                if (a == 1) {
-                    booleanAnswer[i][0] = true;
-                } else if (a == 2) {
-                    booleanAnswer[i][1] = true;
-                } else if (a == 3) {
-                    booleanAnswer[i][2] = true;
-                } else if (a == 4) {
-                    booleanAnswer[i][3] = true;
+            String strDapAn = mQuestions.get(i).getANSWERS().trim().replaceAll("\\s", "");
+            ;
+            String[] dapAnTable = strDapAn.split(",");
+            boolean[] userOptions = userAnswerTable[i];
+            int optionCount = mQuestions.get(i).getOptionCount();
+            boolean haveWrong = false;
+            int userRightOptionCount = 0;
+            for (int j = 0; j < optionCount; j++) {
+                if (userOptions[j] && Arrays.asList(dapAnTable).indexOf(String.valueOf(j + 1)) == -1) {
+                    haveWrong = true;
+                    break;
+                }
+
+                for (String rightOption : dapAnTable) {
+                    if (String.valueOf(j + 1).equals(rightOption)) {
+                        if (userOptions[j])
+                            userRightOptionCount++;
+                    }
                 }
             }
-        }
-        arrAns = new boolean[20];
-        for (int i = 0; i < 20; i++) {
-            if ((booleanAnswer[i][0] == answer[i][0]) && (booleanAnswer[i][1] == answer[i][1])
-                    & (booleanAnswer[i][2] == answer[i][2]) & (booleanAnswer[i][3] == answer[i][3])) {
-                arrAns[i] = true;
+
+            if (!haveWrong && dapAnTable.length != 0) {
+                markPoint += userRightOptionCount * 1f / dapAnTable.length;
+                if (userRightOptionCount > 0)
+                    resultOverview[i] = true;
             }
         }
+
+        String strResult = String.format(Locale.US, "KQ: %2.2f", markPoint);
+        tvTimer.setText(strResult);
+        countDownTimer.cancel();
+        Log.d(TAG, "endPractice: mark point = " + markPoint);
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.result)
+                .setMessage(getResources().getString(R.string.str_result) + strResult +
+                        "\n" + getResources().getString(R.string.str_view_answer))
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                })
+        .create().show();
+
+
         sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-        endPracticee = true;
+        mBottomAdapter.updateOverviewResult(resultOverview);
+        mBottomAdapter.showResultOverview(true);
+        mBottomAdapter.notifyDataSetChanged();
+
+        mAdapter.updateOverviewResult(resultOverview);
+        mAdapter.endPractice(true);
+        mAdapter.notifyDataSetChanged();
     }
 }

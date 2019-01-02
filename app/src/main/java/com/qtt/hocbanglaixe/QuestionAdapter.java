@@ -25,12 +25,12 @@ import butterknife.OnClick;
 public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.ViewHolder> {
     private Context mContext;
     private List<Question> mData;
-    private ArrayList<String> answer = new ArrayList<>();
     private QuestionAdapterListener mListener;
-    private int indexChoose = -1;
-    private boolean isChoose = false;
     private boolean[][] answers = new boolean[20][4];
     private ArrayList<Boolean> arrIsChoose = new ArrayList<>();
+    private boolean[] resultOverview;
+    private boolean isEnd;
+
     public void setOnItemClickListener(QuestionAdapterListener listener) {
         mListener = listener;
     }
@@ -38,10 +38,11 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.ViewHo
     public QuestionAdapter(Context context, List<Question> Answer) {
         this.mContext = context;
         this.mData = Answer;
-        for(int i = 0; i < 20; i++){
+        for (int i = 0; i < 20; i++) {
             Arrays.fill(this.answers[i], false);
             arrIsChoose.add(false);
         }
+        this.isEnd = false;
     }
 
     public void setQuestionList(List<Question> questions) {
@@ -76,48 +77,89 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.ViewHo
         if (ans1 != null) {
             holder.layout_answer1.setVisibility(View.VISIBLE);
             holder.tvAnswer1.setText(ans1);
-        }
-        else
+        } else
             holder.layout_answer1.setVisibility(View.GONE);
 
         if (ans2 != null) {
             holder.layout_answer2.setVisibility(View.VISIBLE);
             holder.tvAnswer2.setText(ans2);
-        }
-        else
+        } else
             holder.layout_answer2.setVisibility(View.GONE);
 
         if (ans3 != null) {
             holder.layout_answer3.setVisibility(View.VISIBLE);
             holder.tvAnswer3.setText(ans3);
-        }
-        else
+        } else
             holder.layout_answer3.setVisibility(View.GONE);
 
         if (ans4 != null) {
             holder.layout_answer4.setVisibility(View.VISIBLE);
             holder.tvAnswer4.setText(ans4);
-        }
-        else
+        } else
             holder.layout_answer4.setVisibility(View.GONE);
 
         boolean[] answerTable = answers[position];
         int selectColor = ContextCompat.getColor(mContext, R.color.colorPrimary);
         int noneSelectColor = Color.TRANSPARENT;
+        int falseColor = Color.RED;
+        int trueColor = Color.GREEN;
 
-        holder.layout_answer1.setBackgroundColor(answerTable[0]?selectColor:noneSelectColor);
-        holder.layout_answer2.setBackgroundColor(answerTable[1]?selectColor:noneSelectColor);
-        holder.layout_answer3.setBackgroundColor(answerTable[2]?selectColor:noneSelectColor);
-        holder.layout_answer4.setBackgroundColor(answerTable[3]?selectColor:noneSelectColor);
+        if (isEnd) {
+            if (!resultOverview[position])
+                selectColor = falseColor;
+        }
 
+        //highlight user options
+        holder.layout_answer1.setBackgroundColor(answerTable[0] ? selectColor : noneSelectColor);
+        holder.layout_answer2.setBackgroundColor(answerTable[1] ? selectColor : noneSelectColor);
+        holder.layout_answer3.setBackgroundColor(answerTable[2] ? selectColor : noneSelectColor);
+        holder.layout_answer4.setBackgroundColor(answerTable[3] ? selectColor : noneSelectColor);
+
+        if (isEnd) {
+            Question question = mData.get(position);
+            holder.tvAnswerDesc.setText(question.getANSWERDEST());
+            holder.layout_ans_desc.setVisibility(View.VISIBLE);
+            //highlight right answer
+
+            String[] rightOptions = question.getANSWERS().trim().replaceAll("\\s", "").split(",");
+            for (String str : rightOptions) {
+                switch (str) {
+                    case "1":
+                        holder.layout_answer1.setBackgroundColor(trueColor);
+                        break;
+
+                    case "2":
+                        holder.layout_answer2.setBackgroundColor(trueColor);
+                        break;
+
+                    case "3":
+                        holder.layout_answer3.setBackgroundColor(trueColor);
+                        break;
+
+                    case "4":
+                        holder.layout_answer4.setBackgroundColor(trueColor);
+                        break;
+                }
+            }
+        } else
+            holder.layout_ans_desc.setVisibility(View.GONE);
     }
-   public boolean[][] getAnswers(){
+
+    public boolean[][] getAnswers() {
         return answers;
-   }
+    }
 
     @Override
     public int getItemCount() {
         return mData.size();
+    }
+
+    public void endPractice(boolean end) {
+        this.isEnd = end;
+    }
+
+    public void updateOverviewResult(boolean[] resultOverview) {
+        this.resultOverview = resultOverview.clone();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -144,6 +186,11 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.ViewHo
         TextView tvAnswer3;
         @BindView(R.id.tvAnswer4)
         TextView tvAnswer4;
+
+        @BindView(R.id.layout_ans_desc)
+        LinearLayout layout_ans_desc;
+        @BindView(R.id.tvAnswerDescrition)
+        TextView tvAnswerDesc;
 
         public ViewHolder(final View itemView) {
             super(itemView);
@@ -181,6 +228,8 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.ViewHo
     }
 
     private void toggleAnswer(int questionId, int answer, View layout_answer) {
+        if (isEnd)
+            return;
         boolean isSelect;
         isSelect = ((answers[questionId][answer] = !answers[questionId][answer]));
         if (isSelect) {
@@ -191,6 +240,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.ViewHo
 
     public interface QuestionAdapterListener {
         void onQuestionClick(int positon);
+
         void requestImage(String imageID, ImageView imageView);
     }
 
