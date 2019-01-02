@@ -1,3 +1,29 @@
 <resources>
     <string name="app_name">Hoc Bang Lai Xe</string>
+    <string name="login_with_google">Login with Google</string>
+    <string name="login_gg_failed">Đăng nhập với Google thất bại</string>
+    <string name="log_out">Đăng xuất</string>
+    <string name="logout_success">Đăng xuất thành công</string>
+    <string name="logout_failed">Đăng xuất thất bại</string>
+    <string name="processing">Đang xử lý...</string>
+    <string name="loading">Loading...</string>
+    <string name="title_activity_test">TestActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+    <string name="history">Lịch sử</string>
+    <string name="profile">Hồ sơ</string>
+    <string name="help">Trợ giúp</string>
+    <string name="title_activity_sign_activty">Biển báo</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="main_activity_title">Học bằng lái xe A1</string>
+    <string name="answer_desc">Giải thích đáp án</string>
+    <string name="str_result">Kết quả:</string>
+    <string name="str_view_answer">Hãy xem đáp án nhé!!</string>
+    <string name="result">Kết quả</string>
+    <string name="end_alert">Thời gian vẫn còn, bạn có chắc muốn kết thúc bài thi không??</string>
+    <string name="ok">OK</string>
 </resources>
