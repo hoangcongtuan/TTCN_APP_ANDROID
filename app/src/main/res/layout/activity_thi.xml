@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -54,6 +54,7 @@
                 android:layout_gravity="center"/>
         </LinearLayout>
         <TextView
+            android:id="@+id/tv_end"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:textColor="#fff"
@@ -69,49 +70,11 @@
         android:id="@+id/rc_answer"
         android:layout_width="match_parent"
         android:orientation="horizontal"
-        android:layout_height="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="48dp"
+        android:layout_marginTop="48dp"
         android:layout_weight="1">
     </android.support.v7.widget.RecyclerView>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:background="#00BFFF"
-        android:layout_height="48dp">
-        <ImageView
-            android:id="@+id/imgBack"
-            android:layout_width="48dp"
-            android:padding="16dp"
-            android:layout_height="48dp"
-            android:src="@drawable/ic_back_arrow"/>
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:layout_height="wrap_content">
-            <TextView
-                android:id="@+id/tv_num_ques_below"
-                android:layout_marginLeft="5dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:textColor="#fff"
-                android:text="1"
-                android:layout_gravity="center"/>
-            <TextView
-                android:layout_marginLeft="5dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:text="/ 20"
-                android:textColor="#fff"
-                android:layout_gravity="center"/>
-        </LinearLayout>
-        <ImageView
-            android:id="@+id/imgNext"
-            android:layout_width="48dp"
-            android:padding="16dp"
-            android:layout_height="48dp"
-            android:src="@drawable/ic_next_arrow"/>
-    </LinearLayout>
-</LinearLayout>
+    <include layout="@layout/bottom_sheet" />
+
+</android.support.design.widget.CoordinatorLayout>

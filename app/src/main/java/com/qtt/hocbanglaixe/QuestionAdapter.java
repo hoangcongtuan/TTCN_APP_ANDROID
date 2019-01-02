@@ -25,10 +25,12 @@ import butterknife.OnClick;
 public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.ViewHolder> {
     private Context mContext;
     private List<Question> mData;
+    private ArrayList<String> answer = new ArrayList<>();
     private QuestionAdapterListener mListener;
-
+    private int indexChoose = -1;
+    private boolean isChoose = false;
     private boolean[][] answers = new boolean[20][4];
-
+    private ArrayList<Boolean> arrIsChoose = new ArrayList<>();
     public void setOnItemClickListener(QuestionAdapterListener listener) {
         mListener = listener;
     }
@@ -36,8 +38,10 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.ViewHo
     public QuestionAdapter(Context context, List<Question> Answer) {
         this.mContext = context;
         this.mData = Answer;
-        for(int i = 0; i < 20; i++)
+        for(int i = 0; i < 20; i++){
             Arrays.fill(this.answers[i], false);
+            arrIsChoose.add(false);
+        }
     }
 
     public void setQuestionList(List<Question> questions) {
@@ -105,8 +109,11 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.ViewHo
         holder.layout_answer2.setBackgroundColor(answerTable[1]?selectColor:noneSelectColor);
         holder.layout_answer3.setBackgroundColor(answerTable[2]?selectColor:noneSelectColor);
         holder.layout_answer4.setBackgroundColor(answerTable[3]?selectColor:noneSelectColor);
-    }
 
+    }
+   public boolean[][] getAnswers(){
+        return answers;
+   }
 
     @Override
     public int getItemCount() {
@@ -141,7 +148,6 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.ViewHo
         public ViewHolder(final View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
