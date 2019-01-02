@@ -25,17 +25,9 @@ public class AnswerBottomAdapter extends RecyclerView.Adapter<AnswerBottomAdapte
     private List<Boolean> mData;
     private AnswerBottomAdapterListener mListener;
     private int index = -1;
-    boolean[] arrAns;
-    private boolean checkEnd = false;
     private boolean[][] answers = new boolean[20][4];
-
-
-    public AnswerBottomAdapter(ThiActivity context, boolean[][] answer, boolean[] arrAns) {
-        this.mContext = context;
-        this.arrAns = arrAns;
-        this.answers = answer;
-        checkEnd = true;
-    }
+    private boolean[] resultOverview;
+    private boolean showResultOverview;
 
     public void setOnItemClickListener(AnswerBottomAdapterListener listener) {
         mListener = listener;
@@ -44,14 +36,12 @@ public class AnswerBottomAdapter extends RecyclerView.Adapter<AnswerBottomAdapte
     public AnswerBottomAdapter(Context context, List<Boolean> Answer) {
         this.mContext = context;
         this.mData = Answer;
-//        for(int i = 0; i < 20; i++)
-//            Arrays.fill(this.answers[i], false);
-    }
+        this.resultOverview = new boolean[20];
+        for(int i = 0; i < 20; i++)
+            Arrays.fill(this.answers[i], false);
 
-    public AnswerBottomAdapter(Context context, boolean[][] answers, List<Boolean> Answer) {
-        this.mContext = context;
-        this.answers = answers;
-        this.mData = Answer;
+        Arrays.fill(resultOverview, false);
+        showResultOverview = false;
     }
 
     public void setSeclectIndex(int index) {
@@ -70,19 +60,23 @@ public class AnswerBottomAdapter extends RecyclerView.Adapter<AnswerBottomAdapte
         holder.tvNumQues.setText((position + 1) + "");
         boolean[] answerTable = answers[position];
         int selectColor = ContextCompat.getColor(mContext, R.color.colorPrimary);
-        int noneSelectColor = Color.TRANSPARENT;
-        if (!checkEnd) {
+
+        if (position + 1 == index) {
+            holder.layoutNumQues.setBackgroundResource(R.drawable.answer_item_bottom_active);
+            holder.tvNumQues.setTextColor(Color.WHITE);
+        } else if (answerTable[0] || answerTable[1] || answerTable[2] || answerTable[3]) {
+            holder.layoutNumQues.setBackgroundResource(R.drawable.sl_item_ans);
+            holder.layoutNumQues.setSelected(true);
+            holder.tvNumQues.setTextColor(selectColor);
+        }
+
+
+        if (!showResultOverview) {
+            holder.imgAnsWarning.setVisibility(View.GONE);
             holder.imgAns.setVisibility(View.GONE);
-            if (position + 1 == index) {
-                holder.layoutNumQues.setSelected(true);
-                holder.tvNumQues.setTextColor(Color.WHITE);
-            }
-            if (answerTable[0] || answerTable[1] || answerTable[2] || answerTable[3]) {
-                holder.tvNumQues.setSelected(true);
-            }
+
         } else {
-            holder.imgAns.setVisibility(View.VISIBLE);
-            if(arrAns[position]){
+            if(resultOverview[position]){
                 holder.imgAnsWarning.setVisibility(View.GONE);
                 holder.imgAns.setVisibility(View.VISIBLE);
             } else {
@@ -97,6 +91,18 @@ public class AnswerBottomAdapter extends RecyclerView.Adapter<AnswerBottomAdapte
     @Override
     public int getItemCount() {
         return 20;
+    }
+
+    public void updateAnswerTable(boolean[][] answer) {
+        this.answers = answer.clone();
+    }
+
+    public void updateOverviewResult(boolean[] resultOverview) {
+        this.resultOverview = resultOverview.clone();
+    }
+
+    public void showResultOverview(boolean show) {
+        this.showResultOverview = show;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

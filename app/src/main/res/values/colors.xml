@@ -5,6 +5,8 @@
     <color name="colorAccent">#D81B60</color>
 
     <color name="blueGrey">#607D8B</color>
+    <color name="colorGray">#8e8f8f</color>
     <color name="drawableTint">#000000</color>
+    <color name="colorLightGreen">#AED581</color>
 
 </resources>

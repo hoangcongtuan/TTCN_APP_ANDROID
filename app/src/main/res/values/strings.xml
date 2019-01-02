@@ -20,4 +20,10 @@
     <string name="title_activity_sign_activty">Biển báo</string>
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="main_activity_title">Học bằng lái xe A1</string>
+    <string name="answer_desc">Giải thích đáp án</string>
+    <string name="str_result">Kết quả:</string>
+    <string name="str_view_answer">Hãy xem đáp án nhé!!</string>
+    <string name="result">Kết quả</string>
+    <string name="end_alert">Thời gian vẫn còn, bạn có chắc muốn kết thúc bài thi không??</string>
+    <string name="ok">OK</string>
 </resources>
